@@ -1,0 +1,36 @@
+double chan[4];
+
+void setup() {
+  pinMode(2,INPUT);
+  pinMode(3,INPUT);
+  pinMode(4,INPUT);
+  pinMode(5,INPUT);
+  Serial.begin(9600);
+
+}
+
+void loop() {
+
+// the RC PWM  from the pixhawk motor ports is read
+// command arduino pulseInt
+
+  chan[0]=pulseIn(2,HIGH);
+  chan[1]=pulseIn(3,HIGH);
+  chan[2]=pulseIn(4,HIGH);
+  chan[3]=pulseIn(5,HIGH);
+
+
+
+   // once read, then is printed, but it can be scaled with a mapping function
+   // so that the range 1000-2000 can be translate by the arduino as -255 to 255
+   // once done this, data can be sent to the required DC brushed motors by connecting
+   //to the arduino a direction pin (-1 or 1) and an speed pin (0 to 255), observe that
+   // this establish a zero reference at 1500 RC from pixhawk and 0 at arduino            
+  Serial.print(chan[0]);
+  Serial.print(",");
+  Serial.print(chan[1]);
+  Serial.print(",");
+  Serial.print(chan[2]);
+  Serial.print(",");
+  Serial.println(chan[3]);
+}

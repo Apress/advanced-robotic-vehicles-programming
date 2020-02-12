@@ -1,0 +1,75 @@
+// 2 channel for reading PWM RC 1000-2000 from the pixhawk
+double cha[2];
+// 2 outputs for DC brushed motors PWM duty cycle 0-255
+double mo[2];
+// 2 ouputs for motor sign or spin direction
+double simo[2];
+
+void setup() {
+
+// pins to receive the signals generated in the RC output from the pixhawk
+pinMode(2,INPUT);
+pinMode(4,INPUT);
+
+// available pins to generate PWM type duty cycle in Arduino-uno
+// 3 5 6 9 10 11 
+
+// in this case for two motors we choose the pins 10 and 11 
+pinMode(10, OUTPUT);
+pinMode(11, OUTPUT);
+
+// the L298 needs in addition to the PWM, two signals for the direction of rotation
+// of each motor
+
+pinMode(5, OUTPUT);
+pinMode(6, OUTPUT);
+
+pinMode(7, OUTPUT);
+pinMode(8, OUTPUT);
+
+Serial.begin(9600);
+}
+
+void loop() {
+
+// spin sense by default
+simo[0]=0;
+simo[1]=0;
+
+// reading of the pixhawk connected to digital pins 2 and 4
+cha[0]=pulseIn(2,HIGH);
+cha[1]=pulseIn(4,HIGH);
+
+// mapping of the pixhawk RC PWM 1000-2000 to the arduino dutyc cycle PWM -255 to 255
+// (the sign is separated later)
+mo[0] = map(cha[0],1000, 2000, -255, 255);
+mo[1] = map(cha[1],1000, 2000, -255, 255);
+
+// here the sign is separated, if the value is positive it is sent 1, if it is negative
+// stays at zero
+
+if (mo[0]>=0)
+{
+  simo[0]=1;
+}
+
+if (mo[1]>=0)
+{
+  simo[1]=1;
+}
+
+// the absolute value is written to each motor
+analogWrite(10, abs(mo[0]));
+analogWrite(11, abs(mo[1]));
+
+// the corresponding sign is written to each motor
+// remember that the L298 requires two values, the original and the denied
+
+digitalWrite(5,simo[0]);
+digitalWrite(6,!simo[0]);
+
+digitalWrite(7,simo[1]);
+digitalWrite(8,!simo[1]);
+
+
+}

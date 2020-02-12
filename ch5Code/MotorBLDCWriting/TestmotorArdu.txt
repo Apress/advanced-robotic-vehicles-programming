@@ -1,0 +1,40 @@
+///////
+
+// by transductor in www.robologs.net
+
+#include<Servo.h>  // library for RC type PWM 
+ 
+Servo ESC; //Servo object invocation
+ 
+int vel = 1000; //initial pulse lenght
+ 
+ 
+void setup()
+{
+  //to assign a pin to the ESC object
+  ESC.attach(10);
+  
+  //To write the initial value at zero
+  ESC.writeMicroseconds(1000);
+  delay(5000);
+
+  //begin  serial port console
+  Serial.begin(9600);
+  Serial.setTimeout(10);
+   
+   
+}
+ 
+ 
+void loop()
+{
+  if(Serial.available() >= 1)
+  {
+    vel = Serial.parseInt(); //to read an integer, be sure that it has 1000-2000 values
+    if(vel != 0)
+    {
+      ESC.writeMicroseconds(vel); //write previous data to ESC and BLDC
+      //delay(2);
+    }
+  }
+}

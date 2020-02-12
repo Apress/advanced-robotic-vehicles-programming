@@ -1,0 +1,25 @@
+byte datos[4];
+unsigned int envi1;
+
+void setup() {
+  Serial.begin(57600);
+}
+
+void loop() {
+  datos[0]='R'; 
+  envi1=2099;
+  datos[1]=envi1>>8;
+  datos[2]=envi1 & 0xFF;
+  datos[3]=datos[1]^datos[2]^datos[3]^datos[4];
+   
+  if (Serial.available())
+  {
+      Serial.write(datos,4); 
+      datos[0]=0;
+      datos[1]=0;
+      datos[2]=0;
+      datos[3]=0;
+    
+  }
+  
+}

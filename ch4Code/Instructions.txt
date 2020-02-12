@@ -1,0 +1,1 @@
+Remember that this codes are only source codes, you need to create a project and include the content of this files in the corresponding project, see the corresponding section of the book for more info about the way you can do new projects or help yourself by using the hellodrone project in chapter 2
